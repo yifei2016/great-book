@@ -5,14 +5,35 @@
     <title>Find your favorite book</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <button type="button" class="btn btn-success" id="key">Request API key</button>
-     <p>Received: <span id="keyValue"></span> </p>
 
-    <button type="button" class="btn btn-success" id="add">Add books</button>
+    <!-- Modal -->
+    <div class="modal fade" id="editBookModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-success" id="key">Request API key</button>
+     <p class="alert alert-success" role="alert" style="width:20vw;">Received: <span id="keyValue"></span> </p>
+
+    <button type="button" class="btn btn-success" id="add" onclick="addFunction()">Add books</button>
     <div>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Title" style="width:50vw;">
       <input type="email" class="form-control" id="inputAuthor" placeholder="Author" style="width:50vw;">
@@ -20,28 +41,13 @@
 
     <div>
       <button type="button" class="btn btn-success" id="viewButton">View data</button>
-      <ul id="addBook" class="list-group"> </ul>
+      <div id="errorDiv" style="width:50vw"></div>
+      <ul id="bookList" class="list-group"> </ul>
     </div>
-
-    <!-- <div>
-      <button type="button" class="btn btn-success" id="modifyButton">Modify data</button>
-      <p id="modify"></p>
-      <input type="email" class="form-control" id="modifyId" placeholder="number" style="width:50vw;">
-      <input type="email" class="form-control" id="modifyTitle" placeholder="Title" style="width:50vw;">
-      <input type="email" class="form-control" id="modifyAuthor" placeholder="Author" style="width:50vw;">
-    </div> -->
-
-    <div>
-      <button type="button" class="btn btn-success" id="deleteButton">Delete data</button>
-      <br>
-      <input type="text" placeholder="Id" id="deleteInput">
-    </div>
-
 
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
     <script src="task.js" charset="utf-8"></script>
   </body>
 
