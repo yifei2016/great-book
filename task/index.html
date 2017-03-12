@@ -38,11 +38,12 @@
           <div class="modal-body">
             <input type="text" placeholder="Title" id="newTitleInput">
             <input type="text" placeholder="Author" id="newAuthorInput">
+            <input type="hidden" id="oldBookId">
           </div>
           <div id="errorDiv2"></div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" id="updateBookButton" onclick="updateBook()">Save book</button>
+            <button type="button" class="btn btn-success" id="updateBookButton" onclick="updateBook(event)">Save book</button>
           </div>
         </div>
       </div>

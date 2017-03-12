@@ -15,6 +15,7 @@ let modifyId = document.getElementById("modifyId");
 let modifyAuthor = document.getElementById("modifyAuthor");
 let newTitleInput = document.getElementById("newTitleInput");
 let newAuthorInput = document.getElementById("newAuthorInput");
+let oldBookinput = document.getElementById("oldBookId");
 
 
 
@@ -24,20 +25,34 @@ function getError(message){
   </div>`
 }
 
-function updateBook(event,bookId){
+function updateBook(event){
+  let bookId = oldBookinput.value;
+  let bookTitle = newTitleInput.value;
+  let bookAuthor = newAuthorInput.value;
   debugger
-  fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=update&key=M7y37&id=${bookId}&title=${newTitleInput.value}&author=${newAuthorInput.value}`)
+  fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=update&key=M7y37&id=${bookId}&title=${bookTitle}&author=${bookAuthor}`)
   .then(function(res) {
     return res.json()
   })
   .then(function(data) {
     if(data.status==="error") throw "Failed to add book";
-    errorDiv2.innerHTML='<p class="alert alert-warning" role="alert">your book have been added</p>';
+    $('#editBookModal').modal('hide');
+
   })
+
+
   .catch(function(error){
      errorDiv2.innerHTML = getError(error);
   });
 }
+function editBook(event,bookId,bookTitle,bookAuthor){
+  
+  oldBookinput.value=bookId;
+  newTitleInput.value = bookTitle;
+  newAuthorInput.value = bookAuthor;
+  $('#editBookModal').modal({})
+}
+
 
 function deleteBook(event,bookId){
   fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=delete&key=M7y37&id=${bookId}`)
@@ -102,22 +117,24 @@ window.onload = function(){
       if(data.status === "error") throw data.message;
       var books = data.data;
       for(let i=books.length-1;i>=books.length-5;i--){
-          let listItems = document.createElement("li");
-          listItems.className = "list-group-item list-group-item-success justify-content-between";
-          listItems.id = books[i].id;
-          listItems.innerHTML = `<p> bookTitle: <span class="titleClass">${books[i].title}</span>,
-          bookAuthor: <span class="authorClass">${books[i].author}</span>,
-          bookId: <span class="idClass">${books[i].id}</span></p>
-          <div>
-            <button type="button" class="btn-sm btn-info" data-toggle="modal" data-target="#editBookModal">
-              <i class="fa fa-pencil" aria-hidden="true"></i>
-            </button>
 
-            <button type="button" class="btn-sm btn-danger" onclick="deleteBook(event,${books[i].id})" >
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
-            </button>
-          </div>`;
-          bookList.appendChild(listItems);
+
+        let listItems = document.createElement("li");
+        listItems.className = "list-group-item list-group-item-success justify-content-between";
+        listItems.id = books[i].id;
+        listItems.innerHTML = `<p> bookTitle: <span class="titleClass">${books[i].title}</span>,
+        bookAuthor: <span class="authorClass">${books[i].author}</span>,
+        bookId: <span class="idClass">${books[i].id}</span></p>
+        <div>
+        <button type="button" class="btn-sm btn-info" onclick="editBook(event,'${books[i].id}','${books[i].title}','${books[i].author}')">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+        </button>
+
+        <button type="button" class="btn-sm btn-danger" onclick="deleteBook(event,${books[i].id})" >
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+        </button>
+        </div>`;
+        bookList.appendChild(listItems);
       }
     })
     .catch(function(error) {
