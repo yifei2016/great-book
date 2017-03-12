@@ -17,7 +17,43 @@ let newTitleInput = document.getElementById("newTitleInput");
 let newAuthorInput = document.getElementById("newAuthorInput");
 let oldBookinput = document.getElementById("oldBookId");
 
+function listBook(){
 
+    fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=M7y37`)
+    .then(function(res) {
+      return res.json();
+
+    })
+    .then(function(data) {
+      if(data.status === "error") throw data.message;
+      var books = data.data;
+      while(bookList.hasChildNodes()){
+        bookList.removeChild(bookList.lastChild);
+      }
+      for(let i=books.length-1;i>=books.length-5;i--){
+        let listItems = document.createElement("li");
+        listItems.className = "list-group-item list-group-item-success justify-content-between";
+        listItems.id = books[i].id;
+        listItems.innerHTML = `<p> bookTitle: <span class="titleClass">${books[i].title}</span>,
+        bookAuthor: <span class="authorClass">${books[i].author}</span>,
+        bookId: <span class="idClass">${books[i].id}</span></p>
+        <div>
+        <button type="button" class="btn-sm btn-info" onclick="editBook(event,'${books[i].id}','${books[i].title}','${books[i].author}')">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+        </button>
+
+        <button type="button" class="btn-sm btn-danger" onclick="deleteBook(event,${books[i].id})" >
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+        </button>
+        </div>`;
+        bookList.appendChild(listItems);
+      }
+    })
+    .catch(function(error) {
+      errorDiv.innerHTML = getError(error);
+    });
+
+}
 
 function getError(message){
   return `<div class="alert alert-danger" role="alert">
@@ -29,7 +65,6 @@ function updateBook(event){
   let bookId = oldBookinput.value;
   let bookTitle = newTitleInput.value;
   let bookAuthor = newAuthorInput.value;
-  debugger
   fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=update&key=M7y37&id=${bookId}&title=${bookTitle}&author=${bookAuthor}`)
   .then(function(res) {
     return res.json()
@@ -37,6 +72,7 @@ function updateBook(event){
   .then(function(data) {
     if(data.status==="error") throw "Failed to add book";
     $('#editBookModal').modal('hide');
+    listBook();
 
   })
 
@@ -46,7 +82,6 @@ function updateBook(event){
   });
 }
 function editBook(event,bookId,bookTitle,bookAuthor){
-  
   oldBookinput.value=bookId;
   newTitleInput.value = bookTitle;
   newAuthorInput.value = bookAuthor;
@@ -107,40 +142,7 @@ window.onload = function(){
 
   })
 
-  viewButton.addEventListener("click", function(event) {
-    fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=M7y37`)
-    .then(function(res) {
-      return res.json();
-
-    })
-    .then(function(data) {
-      if(data.status === "error") throw data.message;
-      var books = data.data;
-      for(let i=books.length-1;i>=books.length-5;i--){
-
-
-        let listItems = document.createElement("li");
-        listItems.className = "list-group-item list-group-item-success justify-content-between";
-        listItems.id = books[i].id;
-        listItems.innerHTML = `<p> bookTitle: <span class="titleClass">${books[i].title}</span>,
-        bookAuthor: <span class="authorClass">${books[i].author}</span>,
-        bookId: <span class="idClass">${books[i].id}</span></p>
-        <div>
-        <button type="button" class="btn-sm btn-info" onclick="editBook(event,'${books[i].id}','${books[i].title}','${books[i].author}')">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
-        </button>
-
-        <button type="button" class="btn-sm btn-danger" onclick="deleteBook(event,${books[i].id})" >
-        <i class="fa fa-trash-o" aria-hidden="true"></i>
-        </button>
-        </div>`;
-        bookList.appendChild(listItems);
-      }
-    })
-    .catch(function(error) {
-      errorDiv.innerHTML = getError(error);
-    });
-  });
+  viewButton.addEventListener("click", listBook);
 
 
 
