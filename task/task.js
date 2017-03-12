@@ -17,8 +17,13 @@ let newTitleInput = document.getElementById("newTitleInput");
 let newAuthorInput = document.getElementById("newAuthorInput");
 let oldBookinput = document.getElementById("oldBookId");
 
-function listBook(){
+function clearBooks(){
+  while(bookList.hasChildNodes()){
+    bookList.removeChild(bookList.lastChild);
+  }
+}
 
+function listBook(){
     fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=M7y37`)
     .then(function(res) {
       return res.json();
@@ -27,9 +32,7 @@ function listBook(){
     .then(function(data) {
       if(data.status === "error") throw data.message;
       var books = data.data;
-      while(bookList.hasChildNodes()){
-        bookList.removeChild(bookList.lastChild);
-      }
+      clearBooks();
       for(let i=books.length-1;i>=books.length-5;i--){
         let listItems = document.createElement("li");
         listItems.className = "list-group-item list-group-item-success justify-content-between";
@@ -73,7 +76,6 @@ function updateBook(event){
     if(data.status==="error") throw "Failed to add book";
     $('#editBookModal').modal('hide');
     listBook();
-
   })
 
 
