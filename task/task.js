@@ -13,6 +13,10 @@ let modifyButton = document.getElementById("modifyButton");
 let modifyTitle = document.getElementById("modifyTitle");
 let modifyId = document.getElementById("modifyId");
 let modifyAuthor = document.getElementById("modifyAuthor");
+let newTitleInput = document.getElementById("newTitleInput");
+let newAuthorInput = document.getElementById("newAuthorInput");
+
+
 
 function getError(message){
   return `<div class="alert alert-danger" role="alert">
@@ -20,9 +24,19 @@ function getError(message){
   </div>`
 }
 
-function editBook(event){
-
-
+function updateBook(event,bookId){
+  debugger
+  fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=update&key=M7y37&id=${bookId}&title=${newTitleInput.value}&author=${newAuthorInput.value}`)
+  .then(function(res) {
+    return res.json()
+  })
+  .then(function(data) {
+    if(data.status==="error") throw "Failed to add book";
+    errorDiv2.innerHTML='<p class="alert alert-warning" role="alert">your book have been added</p>';
+  })
+  .catch(function(error){
+     errorDiv2.innerHTML = getError(error);
+  });
 }
 
 function deleteBook(event,bookId){
@@ -82,6 +96,7 @@ window.onload = function(){
     fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=M7y37`)
     .then(function(res) {
       return res.json();
+
     })
     .then(function(data) {
       if(data.status === "error") throw data.message;
@@ -94,7 +109,7 @@ window.onload = function(){
           bookAuthor: <span class="authorClass">${books[i].author}</span>,
           bookId: <span class="idClass">${books[i].id}</span></p>
           <div>
-            <button type="button" class="btn-sm btn-info" data-toggle="modal" data-target="#editBookModal`" onclick="editBook(event)">
+            <button type="button" class="btn-sm btn-info" data-toggle="modal" data-target="#editBookModal">
               <i class="fa fa-pencil" aria-hidden="true"></i>
             </button>
 
