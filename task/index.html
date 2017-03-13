@@ -20,12 +20,13 @@
             <a class="nav-link" href="index.html" >Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact us</a>
+            <a class="nav-link" href="contact.html">Contact us</a>
           </li>
         </ul>
       </div>
     </nav>
     <!-- Modal -->
+
     <div class="modal fade" id="editBookModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -56,26 +57,50 @@
       </div>
     </div>
 
-    <div class="container-fluid" style="background-color:#e3f2fd;">
+    <div class="container-fluid" style="background-color:#e3f2fd; flex:1;width:100vw; padding:0 0 5vh 0;">
       <div class="row justify-content-center" style="padding:5% 0 3% 0;">
         <form class="form-inline justify-content-between">
           <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inputEmail3" placeholder="Title">
           <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inputAuthor" placeholder="Author">
-          <button type="button" class="btn btn-primary mb-2 mr-sm-2 mb-sm-0" id="add" onclick="addFunction()">Add books</button>
-          <button type="button" class="btn btn-success mb-2 mr-sm-2 mb-sm-0" id="viewButton">List books</button>
+          <button type="button" class="btn btn-primary mb-2 mr-sm-2 mb-sm-0" id="add" onclick="addBook()">Add books</button>
+          <button type="button" class="btn btn-success mb-2 mr-sm-2 mb-sm-0" id="viewButton" onclick="listBook()">List books</button>
+          <button type="button" class="btn btn-warning mb-2 mr-sm-2 mb-sm-0" id="viewButton" onclick="viewMoreBook()">View more books</button>
         </form>
       </div>
       <div class="row justify-content-center" >
         <div id="errorDiv"></div>
+      </div>
+      <div class="row justify-content-center">
         <ul id="bookList" class="list-group"> </ul>
         <!-- <div id="spin">
           <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
           <span class="sr-only">Loading...</span>
         </div> -->
-
-
       </div>
     </div>
+
+    <footer>
+      <div class="container-fluid text-center">
+        <div class="footer">
+          <address>
+            <strong>Nordstan</strong>
+            <br> Brunnsparken
+            <br> Göteborg, 12345
+            <br>
+            <abbr title="Phone">Telefon:</abbr>0702555555
+          </address>
+          <div class="media-icon-group">
+            <div >
+              <a href="#" class="icons"><i class="fa fa-twitter-square fa-2x media-icon" aria-hidden="true"></i></a>
+              <a href="#" class="icons"><i class="fa fa-facebook-official fa-2x media-icon" aria-hidden="true"></i></a>
+              <a href="#" class="icons"><i class="fa fa-instagram fa-2x media-icon" aria-hidden="true"></i></a>
+              <a href="#" class="icons"><i class="fa fa-envelope-o fa-2x media-icon" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <p class="contact-us">Click on the button above to contact us.</p>
+        </div>
+      </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>

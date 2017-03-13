@@ -16,24 +16,25 @@ let modifyAuthor = document.getElementById("modifyAuthor");
 let newTitleInput = document.getElementById("newTitleInput");
 let newAuthorInput = document.getElementById("newAuthorInput");
 let oldBookinput = document.getElementById("oldBookId");
-
+let page = 0;
 function clearBooks(){
   while(bookList.hasChildNodes()){
     bookList.removeChild(bookList.lastChild);
   }
 }
 
-function listBook(){
+function listBook(limit=5){
+
     fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=M7y37`)
     .then(function(res) {
       return res.json();
-
     })
     .then(function(data) {
+
       if(data.status === "error") throw data.message;
-      var books = data.data;
+      var books = data.data;;
       clearBooks();
-      for(let i=books.length-1;i>=books.length-5;i--){
+      for(let i=books.length-1;i>=books.length-limit;i--){
         let listItems = document.createElement("li");
         listItems.className = "list-group-item list-group-item-success justify-content-between";
         listItems.id = books[i].id;
@@ -53,9 +54,15 @@ function listBook(){
       }
     })
     .catch(function(error) {
+        
       errorDiv.innerHTML = getError(error);
     });
 
+}
+function viewMoreBook(){
+  page++;
+  let limit = 5 + 5*page;
+  listBook(limit);
 }
 
 function getError(message){
@@ -83,13 +90,13 @@ function updateBook(event){
      errorDiv2.innerHTML = getError(error);
   });
 }
+
 function editBook(event,bookId,bookTitle,bookAuthor){
   oldBookinput.value=bookId;
   newTitleInput.value = bookTitle;
   newAuthorInput.value = bookAuthor;
   $('#editBookModal').modal({})
 }
-
 
 function deleteBook(event,bookId){
   fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=delete&key=M7y37&id=${bookId}`)
@@ -106,7 +113,7 @@ function deleteBook(event,bookId){
       if(bookId == child.id){
         let deletedBook = bookList.removeChild(child);
         errorDiv.innerHTML = `<p class="alert alert-warning" role="alert">Book: ${deletedBook.id} is deleted</p>`;
-        break;
+        break;//after finding book, exit loop
       }
     }
   })
@@ -115,7 +122,7 @@ function deleteBook(event,bookId){
   });
 }
 
-function addFunction (){
+function addBook (){
     fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=M7y37&title=${inputTitle.value}&author=${inputAuthor.value}`)
     .then(function(res) {
       return res.json()
@@ -144,7 +151,7 @@ window.onload = function(){
 
   })
 
-  viewButton.addEventListener("click", listBook);
+  // viewButton.addEventListener("click", listBook);
 
 
 

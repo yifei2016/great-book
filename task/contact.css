@@ -1,0 +1,19 @@
+.images{
+  width:50%;
+  height:40%;
+}
+.opinionField{
+  margin-top: 15vh;
+  width:50vw;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+#map {
+  
+  height: 100%;
+  width: 50%;
+}

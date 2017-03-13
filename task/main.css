@@ -3,10 +3,29 @@ li a:hover{
 }
 #jumbotron{
   width:100vw;
-  height:40vh;
+  height:30vh;
   background-image: url(images/blurimage.jpg);
   background-size: 108% 100%;
   background-repeat: no-repeat;
   margin-top: 63px;
+}
+footer{
 
+  width: 100vw;
+  background-color: black;
+  color:white;
+}
+.icons{
+  color:  pink;
+}
+.icons:hover,
+.icons:active{
+  color:white;
+}
+body{
+  overflow-y: auto;
+  display: flex;
+ min-height: 100vh;
+ flex-direction: column;
+}
 }
