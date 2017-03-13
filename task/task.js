@@ -35,12 +35,12 @@ function listBook(limit=5){
       var books = data.data;;
       clearBooks();
       for(let i=books.length-1;i>=books.length-limit;i--){
-        let listItems = document.createElement("li");
+        let listItems = document.createElement("tr");
         listItems.className = "list-group-item list-group-item-success justify-content-between";
         listItems.id = books[i].id;
-        listItems.innerHTML = `<p> bookTitle: <span class="titleClass">${books[i].title}</span>,
-        bookAuthor: <span class="authorClass">${books[i].author}</span>,
-        bookId: <span class="idClass">${books[i].id}</span></p>
+        listItems.innerHTML = `<tr><td> <span class="titleClass">${books[i].title}</span></td>
+       <td><span class="authorClass">${books[i].author}</span></td>
+       <td><span class="idClass">${books[i].id}</span></td></tr>
         <div>
         <button type="button" class="btn-sm btn-info" onclick="editBook(event,'${books[i].id}','${books[i].title}','${books[i].author}')">
         <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -54,7 +54,7 @@ function listBook(limit=5){
       }
     })
     .catch(function(error) {
-        
+
       errorDiv.innerHTML = getError(error);
     });
 
