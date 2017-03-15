@@ -16,53 +16,97 @@ let modifyAuthor = document.getElementById("modifyAuthor");
 let newTitleInput = document.getElementById("newTitleInput");
 let newAuthorInput = document.getElementById("newAuthorInput");
 let oldBookinput = document.getElementById("oldBookId");
-let page = 0;
+let previous = document.getElementById("previous");
+let next = document.getElementById("next");
+
+let items = document.getElementsByClassName("filter");
+let page = 1;
+let index = 0;
+// let bookPosition;
+let books;
+// let limit;
+
+
 function clearBooks(){
   while(bookList.hasChildNodes()){
     bookList.removeChild(bookList.lastChild);
   }
 }
+// function getTime(timestamp){
+//   let d = new Date(timestamp * 1000);
+//   let year = d.getFullYear();
+//   let month = d.getMonth()+1;
+//   let date = d.getDate();
+//   let hour =d.getHours();
+//   let minute = d.getMinutes();
+//   let fullTime = `${year}-${month}-${date},${hour}:${minute}`;
+//   return fullTime;
+// }
+function bookLoop(){
+  for(let i=books.length-1-index;i>=books.length-index-5;i--){
+    let listItems = document.createElement("tr");
+    // listItems.id = books[i].id;
+    listItems.innerHTML = `<tr> <td><span class="idClass">${books[i].id}</span></td>
+    <td> <span class="titleClass">${books[i].title}</span></td>
+    <td><span class="authorClass">${books[i].author}</span></td>
+    <td><span class="UpdateTimeClass">${books[i].updated}</span></td>
 
-function listBook(limit=5){
+    <div  class="d-flex align-items-center">
+    <button type="button" class="btn-sm btn-info" onclick="editBook(event,'${books[i].id}','${books[i].title}','${books[i].author}')">
+    <i class="fa fa-pencil" aria-hidden="true"></i>
+    </button>
 
-    fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=M7y37`)
-    .then(function(res) {
-      return res.json();
-    })
-    .then(function(data) {
+    <button type="button" class="btn-sm btn-danger" onclick="deleteBook(event,${books[i].id})" >
+    <i class="fa fa-trash-o" aria-hidden="true"></i>
+    </button>
+    </div>
+    </tr>`;
+    bookList.appendChild(listItems);
+  }
+}
 
-      if(data.status === "error") throw data.message;
-      var books = data.data;;
-      clearBooks();
-      for(let i=books.length-1;i>=books.length-limit;i--){
-        let listItems = document.createElement("tr");
-        listItems.className = "list-group-item list-group-item-success justify-content-between";
-        listItems.id = books[i].id;
-        listItems.innerHTML = `<tr><td> <span class="titleClass">${books[i].title}</span></td>
-       <td><span class="authorClass">${books[i].author}</span></td>
-       <td><span class="idClass">${books[i].id}</span></td></tr>
-        <div>
-        <button type="button" class="btn-sm btn-info" onclick="editBook(event,'${books[i].id}','${books[i].title}','${books[i].author}')">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
-        </button>
+function listBook(){
+  fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=M7y37`)
+  .then(function(res) {
+    return res.json();
+  })
+  .then(function(data) {
+    if(data.status === "error") throw data.message;
+    errorDiv.innerHTML = "";
+    books = data.data;
+    clearBooks();
+    bookLoop();
+  })
+  .catch(function(error) {
+    errorDiv.innerHTML = getError(error);
+  });
+}
+// booksPerPage = 5
+// bookPosition = bookList.length - booksPerPage
+// function viewMoreBook(){
+//   page++;
+//   let limit = 5 + 5*page;
+//   listBook(limit);
+// }
 
-        <button type="button" class="btn-sm btn-danger" onclick="deleteBook(event,${books[i].id})" >
-        <i class="fa fa-trash-o" aria-hidden="true"></i>
-        </button>
-        </div>`;
-        bookList.appendChild(listItems);
-      }
-    })
-    .catch(function(error) {
-
-      errorDiv.innerHTML = getError(error);
-    });
+function nextPage(){
+  // if(bookList.children.length)
+  index = 5*page;
+  listBook();
+  page++;
 
 }
-function viewMoreBook(){
-  page++;
-  let limit = 5 + 5*page;
-  listBook(limit);
+
+function prePage(){
+  page--;
+  index = 5*page;
+  listBook();
+}
+function changePage(){
+     let pageNumber = Number(event.target.innerText);
+     index = (pageNumber-1)*5;
+     listBook();
+
 }
 
 function getError(message){
@@ -84,8 +128,6 @@ function updateBook(event){
     $('#editBookModal').modal('hide');
     listBook();
   })
-
-
   .catch(function(error){
      errorDiv2.innerHTML = getError(error);
   });
@@ -123,17 +165,17 @@ function deleteBook(event,bookId){
 }
 
 function addBook (){
-    fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=M7y37&title=${inputTitle.value}&author=${inputAuthor.value}`)
-    .then(function(res) {
-      return res.json()
-    })
-    .then(function(data) {
-      if(data.status==="error") throw "Failed to add book";
-      errorDiv.innerHTML='<p class="alert alert-warning" role="alert">your book have been added</p>';
-    })
-    .catch(function(error){
-       errorDiv.innerHTML = getError(error);
-    });
+  fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=M7y37&title=${inputTitle.value}&author=${inputAuthor.value}`)
+  .then(function(res) {
+    return res.json()
+  })
+  .then(function(data) {
+    if(data.status==="error") throw "Failed to add book";
+    errorDiv.innerHTML='<p class="alert alert-warning" role="alert">your book have been added</p>';
+  })
+  .catch(function(error){
+    errorDiv.innerHTML = getError(error);
+  });
 }
 
 window.onload = function(){
@@ -148,16 +190,9 @@ window.onload = function(){
     .catch(function(error){
 
     });
-
   })
 
   // viewButton.addEventListener("click", listBook);
-
-
-
-
-
-
 
 
 // let text = span.innerText
@@ -167,12 +202,6 @@ window.onload = function(){
 // x.addEventListener('blur')
 //
 // element.appendChild  //replaceChild?
-
-
-
-
-
-
 
 
 

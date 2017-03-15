@@ -1,3 +1,6 @@
+nav{
+  color:white;
+}
 li a:hover{
   color: green !important;
 }
@@ -10,7 +13,7 @@ li a:hover{
   margin-top: 63px;
 }
 footer{
-
+  padding-top: 2% ;
   width: 100vw;
   background-color: black;
   color:white;
@@ -28,4 +31,9 @@ body{
  min-height: 100vh;
  flex-direction: column;
 }
+.mainPage{
+  background-color:#e3f2fd;
+  flex:1;width:100vw; /*fix footer*/
+  padding:0 0 5vh 0;
+  cursor:crosshair
 }
