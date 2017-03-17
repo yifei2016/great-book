@@ -130,6 +130,11 @@ function createPagination(){
   let prev = document.createElement("li");
   prev.className = "page-item";
   prev.id = "prev";
+  prev.innerHTML = `<a class="page-link" href="#" aria-label="Previous">
+  <span aria-hidden="true">&laquo;</span>
+  <span class="sr-only" id="previous">Previous</span>
+  </a>`
+  pagination.appendChild(prev);
   prev.addEventListener("click",function(event){
     if(page === 1){
       return;
@@ -140,25 +145,23 @@ function createPagination(){
     bookLoop();
   });
 
-  prev.innerHTML = `<a class="page-link" href="#" aria-label="Previous">
-  <span aria-hidden="true">&laquo;</span>
-  <span class="sr-only" id="previous">Previous</span>
-  </a>`
-  pagination.appendChild(prev);
   let pageNumber =0;
-  for(let p =0; p<=books.length; p = p+perPage){
+  for(let p = 0; p <= books.length; p = p+perPage){
     pageNumber++;
+    console.log(p+"////"+"////"+pageNumber)
     let li = document.createElement("li");
+    li.innerHTML = `<span class="page-link filter" href="#">${pageNumber}</span>`
     li.className = "page-item";
+
     li.addEventListener('click',function(event){
       clearActiveState();
       this.className += " active";
       page = Number(event.target.innerText);
       bookLoop();
     });
-    li.innerHTML = `<span class="page-link filter" href="#">${pageNumber}</span>`
     pagination.appendChild(li);
   }
+
   let next = document.createElement("li");
   next.className = "page-item";
   next.id = "next";
@@ -170,9 +173,9 @@ function createPagination(){
     let children = pagination.children;
     clearActiveState();
     pagination.childNodes[page].className += " active";
-
     bookLoop();
   })
+
   next.innerHTML = ` <a class="page-link" href="#" aria-label="Next">
   <span aria-hidden="true" >&raquo;</span>
   <span class="sr-only" id="next" >Next</span>
@@ -263,13 +266,10 @@ window.onload = function(){
     });
   })
 
- // viewMoreButton.addEventListener("click", function(){
- //   page=1
- //   page = page * perPage;
- //   debugger
- //   listBook();
- //   page++
- // });
+  viewMoreButton.addEventListener("click", function(){
+    page++
+    bookLoop();
+  });
 
 
 // let text = span.innerText
