@@ -2,7 +2,7 @@ let bookList = document.getElementById("bookList");
 let errorDiv = document.getElementById("errorDiv");
 let add = document.getElementById("add");
 let key = document.getElementById("key");
-let viewButton = document.getElementById("viewButton");
+let viewMoreButton = document.getElementById("viewMoreButton");
 let view = document.getElementById("view");
 let inputTitle = document.getElementById("inputEmail3");
 let inputAuthor = document.getElementById("inputAuthor");
@@ -92,7 +92,6 @@ function bookLoop(){
     </button>
 
    </td>
-
     </tr>`;
     bookList.appendChild(listItems);
   }
@@ -264,7 +263,13 @@ window.onload = function(){
     });
   })
 
-  // viewButton.addEventListener("click", listBook);
+ // viewMoreButton.addEventListener("click", function(){
+ //   page=1
+ //   page = page * perPage;
+ //   debugger
+ //   listBook();
+ //   page++
+ // });
 
 
 // let text = span.innerText
@@ -272,8 +277,7 @@ window.onload = function(){
 // let x = document.createElement("input")
 // x.value = text;
 // x.addEventListener('blur')
-//
-// element.appendChild  //replaceChild?
+
 
 
 
