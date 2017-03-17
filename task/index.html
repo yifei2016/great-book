@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Find your favorite book</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/css/tether.min.css"> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="main.css">
@@ -90,22 +91,8 @@
       </div> -->
     </div>
     <nav aria-label="Page navigation example" class="d-flex justify-content-center" style="margin-top:3%;">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous" onclick="prePage()">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only" id="previous">Previous</span>
-          </a>
-        </li>
-        <li class="page-item"><a class="page-link filter" onclick="changePage(event)" href="#">1</a></li>
-        <li class="page-item"><a class="page-link filter" href="#"  onclick="changePage(event)">2</a></li>
-        <li class="page-item"><a class="page-link filter" href="#"  onclick="changePage(event)">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next" onclick="nextPage()">
-            <span aria-hidden="true" >&raquo;</span>
-            <span class="sr-only" id="next" >Next</span>
-          </a>
-        </li>
+      <ul class="pagination" id="pagination">
+
       </ul>
     </nav>
   </div>
@@ -137,6 +124,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
     <script src="task.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+      });
+    </script>
   </body>
 
 </html>

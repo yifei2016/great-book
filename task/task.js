@@ -18,15 +18,11 @@ let newAuthorInput = document.getElementById("newAuthorInput");
 let oldBookinput = document.getElementById("oldBookId");
 let previous = document.getElementById("previous");
 let next = document.getElementById("next");
-
 let items = document.getElementsByClassName("filter");
+let pagination = document.getElementById("pagination");
 let page = 1;
-let index = 0;
-// let bookPosition;
+const perPage = 7;
 let books;
-// let limit;
-
-
 function clearBooks(){
   while(bookList.hasChildNodes()){
     bookList.removeChild(bookList.lastChild);
@@ -43,23 +39,60 @@ function clearBooks(){
 //   return fullTime;
 // }
 function bookLoop(){
-  for(let i=books.length-1-index;i>=books.length-index-5;i--){
-    let listItems = document.createElement("tr");
-    // listItems.id = books[i].id;
-    listItems.innerHTML = `<tr> <td><span class="idClass">${books[i].id}</span></td>
-    <td> <span class="titleClass">${books[i].title}</span></td>
-    <td><span class="authorClass">${books[i].author}</span></td>
-    <td><span class="UpdateTimeClass">${books[i].updated}</span></td>
+  clearBooks();
+  let start = page * perPage - perPage;
+  let end = (page * perPage) > books.length ? books.length : (page * perPage);
+  // let end;
+  // if((page * perPage) > books.length){
+  //   end = books.length
+  // }else{
+  //   end = page * perPage;
+  // }
+  //
+  // let end = page*perPage;;
+  // if(end > books.length){
+  //   end = books.length;
+  // }
+  let prev = document.getElementById("prev");
+  if(page === 1){
+     prev.className += " disabled";
+  }else{
+    prev.classList.remove("disabled");
+  }
+  let next = document.getElementById("next");
+  if((page *perPage) > books.length){
+    next.className += " disabled";
+  }else{
+    next.classList.remove("disabled");
+  }
 
-    <div  class="d-flex align-items-center">
+  // debugger
+  // prev.disabled = (page === 1) ?  true : false
+  // // if(page = 1){
+  //   prev.disabled = true;
+  // }else{
+  //   prev.disabled = false;
+  // }
+  for(let i = start; i < end; i++){
+    let listItems = document.createElement("tr");
+    if(books[i]===undefined){
+      continue;
+    }
+    listItems.innerHTML = `<tr> <td><span class="idClass">${books[i].id}</span></td>
+    <td> <span   data-animation="false" data-toggle="tooltip" data-placement="top" title="${books[i].title}" class="titleClass">${books[i].title}</span></td>
+    <td ><span data-animation="false" data-toggle="tooltip" data-placement="top" title="${books[i].author}" class="authorClass">${books[i].author}</span></td>
+    <td><span class="UpdateTimeClass">${books[i].updated}</span></td>
+    <td class="d-flex justify-content-around">
+
     <button type="button" class="btn-sm btn-info" onclick="editBook(event,'${books[i].id}','${books[i].title}','${books[i].author}')">
     <i class="fa fa-pencil" aria-hidden="true"></i>
     </button>
-
     <button type="button" class="btn-sm btn-danger" onclick="deleteBook(event,${books[i].id})" >
     <i class="fa fa-trash-o" aria-hidden="true"></i>
     </button>
-    </div>
+
+   </td>
+
     </tr>`;
     bookList.appendChild(listItems);
   }
@@ -73,40 +106,79 @@ function listBook(){
   .then(function(data) {
     if(data.status === "error") throw data.message;
     errorDiv.innerHTML = "";
-    books = data.data;
-    clearBooks();
+    books = data.data.reverse();
+    createPagination();
     bookLoop();
   })
   .catch(function(error) {
     errorDiv.innerHTML = getError(error);
   });
 }
-// booksPerPage = 5
-// bookPosition = bookList.length - booksPerPage
-// function viewMoreBook(){
-//   page++;
-//   let limit = 5 + 5*page;
-//   listBook(limit);
-// }
 
-function nextPage(){
-  // if(bookList.children.length)
-  index = 5*page;
-  listBook();
-  page++;
-
+function clearActiveState(){
+  let children = pagination.children;
+  for(let i =0;i<children.length;i++){
+    let child = children[i];
+    child.classList.remove("active");
+  }
 }
 
-function prePage(){
-  page--;
-  index = 5*page;
-  listBook();
-}
-function changePage(){
-     let pageNumber = Number(event.target.innerText);
-     index = (pageNumber-1)*5;
-     listBook();
+function createPagination(){
+  pagination.innerHTML = "";
+  // while(pagination.hasChildNodes()){
+  //   pagination.removeChild(pagination.lastChild);
+  // }
+  let prev = document.createElement("li");
+  prev.className = "page-item";
+  prev.id = "prev";
+  prev.addEventListener("click",function(event){
+    if(page === 1){
+      return;
+    }
+    page--;
+    clearActiveState();
+    pagination.childNodes[page].className += " active";
+    bookLoop();
+  });
 
+  prev.innerHTML = `<a class="page-link" href="#" aria-label="Previous">
+  <span aria-hidden="true">&laquo;</span>
+  <span class="sr-only" id="previous">Previous</span>
+  </a>`
+  pagination.appendChild(prev);
+  let pageNumber =0;
+  for(let p =0; p<=books.length; p = p+perPage){
+    pageNumber++;
+    let li = document.createElement("li");
+    li.className = "page-item";
+    li.addEventListener('click',function(event){
+      clearActiveState();
+      this.className += " active";
+      page = Number(event.target.innerText);
+      bookLoop();
+    });
+    li.innerHTML = `<span class="page-link filter" href="#">${pageNumber}</span>`
+    pagination.appendChild(li);
+  }
+  let next = document.createElement("li");
+  next.className = "page-item";
+  next.id = "next";
+  next.addEventListener("click",function(event){
+    if(page *perPage > books.length){
+      return;
+    }
+    page++;
+    let children = pagination.children;
+    clearActiveState();
+    pagination.childNodes[page].className += " active";
+
+    bookLoop();
+  })
+  next.innerHTML = ` <a class="page-link" href="#" aria-label="Next">
+  <span aria-hidden="true" >&raquo;</span>
+  <span class="sr-only" id="next" >Next</span>
+  </a>`
+  pagination.appendChild(next);
 }
 
 function getError(message){
