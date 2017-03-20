@@ -148,7 +148,6 @@ function createPagination(){
   let pageNumber =0;
   for(let p = 0; p <= books.length; p = p+perPage){
     pageNumber++;
-    console.log(p+"////"+"////"+pageNumber)
     let li = document.createElement("li");
     li.innerHTML = `<span class="page-link filter" href="#">${pageNumber}</span>`
     li.className = "page-item";
